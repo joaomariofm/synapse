@@ -24,6 +24,7 @@ export const Active: Story = {
 }
 
 export const Toggleable: Story = {
+  args: { children: "due only" },
   render: () => {
     const [on, setOn] = useState(false)
     return (
@@ -35,6 +36,7 @@ export const Toggleable: Story = {
 }
 
 export const Row: Story = {
+  args: { children: "all decks" },
   render: () => {
     const [active, setActive] = useState('all decks')
     const filters = ['all decks', 'due only', 'flagged', 'by tag']

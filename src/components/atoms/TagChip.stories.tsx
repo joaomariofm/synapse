@@ -30,6 +30,7 @@ export const Small: Story = {
 }
 
 export const Group: Story = {
+  args: { tag: "cardio" },
   render: () => (
     <div className="flex flex-wrap gap-1.5">
       <TagChip tag="cardio" />
