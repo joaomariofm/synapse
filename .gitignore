@@ -31,3 +31,6 @@ android/app/debug/
 *.apk
 *.aab
 *.keystore
+
+*storybook.log
+storybook-static

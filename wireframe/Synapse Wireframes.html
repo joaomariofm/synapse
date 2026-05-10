@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Synapse — Wireframes</title>
+
+<link rel="stylesheet" href="wireframes.css" />
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Kalam', cursive;
+    background: #ece4d2;
+    color: #1f1d1a;
+  }
+  body.dark { background: #0e0c0a; color: #f1ead8; }
+
+  /* Override design-canvas page background to feel like sketchbook paper */
+  body {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 28px,
+        rgba(150, 130, 90, 0.08) 28px 29px
+      );
+  }
+  body.dark {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 28px,
+        rgba(220, 200, 160, 0.04) 28px 29px
+      );
+  }
+
+  /* tweak the design-canvas chrome to match handwritten vibe */
+  .dc-section-title { font-family: 'Caveat', cursive !important; font-weight: 700 !important; }
+  .dc-artboard-label { font-family: 'Caveat', cursive !important; font-size: 16px !important; }
+
+  /* page header */
+  .page-head {
+    padding: 36px 60px 4px;
+    max-width: 1100px;
+  }
+  .page-head h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 56px;
+    line-height: 1;
+    margin: 0 0 6px;
+  }
+  .page-head p {
+    font-family: 'Kalam', cursive;
+    font-size: 17px;
+    color: #4a4640;
+    margin: 0;
+    max-width: 720px;
+  }
+  body.dark .page-head p { color: #c9c1ad; }
+
+  .page-head .meta {
+    display: inline-flex;
+    gap: 8px;
+    margin-top: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #908a80;
+  }
+  .page-head .meta span {
+    border: 1.2px dashed currentColor;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+</style>
+
+<!-- React + Babel (pinned) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel" src="wf-shared.jsx"></script>
+<script type="text/babel" src="wf-decklist.jsx"></script>
+<script type="text/babel" src="wf-study.jsx"></script>
+<script type="text/babel" src="wf-editor.jsx"></script>
+<script type="text/babel" src="wf-browser.jsx"></script>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Synapse — wireframes</h1>
+  <p>
+    Rough sketches for the four core screens — sparse direction, optimized for a 10" portrait tablet during a study sprint.
+  </p>
+  <div class="meta">
+    <span>4 screens</span>
+    <span>tablet · portrait · 720×1080</span>
+    <span>FSRS · cloze · IO render</span>
+  </div>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel" data-presets="env,react">
+  const { useState, useEffect } = React;
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "theme": "light"
+  }/*EDITMODE-END*/;
+
+  function App() {
+    const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    useEffect(() => {
+      document.body.classList.toggle('dark', tweaks.theme === 'dark');
+      document.querySelectorAll('.wf').forEach((el) => {
+        el.classList.toggle('dark', tweaks.theme === 'dark');
+      });
+    }, [tweaks.theme]);
+
+    // tablet portrait
+    const W = 720, H = 1080;
+
+    return (
+      <>
+        <DesignCanvas storageKey="synapse-wf" initialZoom={0.6}>
+          <DCSection id="deck-list" title="Deck list / home" subtitle="Single hero number, recent decks below">
+            <DCArtboard id="deck-a" label="Hero today" width={W} height={H}>
+              <DeckListA />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="study" title="Study session" subtitle="Immersive — card commands the screen">
+            <DCArtboard id="study-a" label="Card commands the screen" width={W} height={H}>
+              <StudyA />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="editor" title="Card editor" subtitle="Single column — just write">
+            <DCArtboard id="editor-a" label="Just write" width={W} height={H}>
+              <EditorA />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="browser" title="Card browser" subtitle="Search-first list">
+            <DCArtboard id="browser-a" label="Search hero" width={W} height={H}>
+              <BrowserA />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Appearance">
+            <TweakRadio
+              label="Theme"
+              value={tweaks.theme}
+              options={[
+                { value: 'light', label: 'Light' },
+                { value: 'dark', label: 'Dark' },
+              ]}
+              onChange={(v) => setTweak('theme', v)}
+            />
+          </TweakSection>
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
